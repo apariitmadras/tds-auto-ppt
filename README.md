@@ -2,7 +2,7 @@
 
 Turn long text/markdown into a downloadable **`.pptx`** that adopts the **style of an uploaded PowerPoint template**. Users can choose an LLM provider (**OpenAI**, **Claude (Anthropic)**, or **Gemini (Google)**) and paste their own API key — or run **without** any key (heuristic mode).
 
-**Live demo:** https://tds-auto-ppt-production.up.railway.app/
+**Live App:** https://tds-auto-ppt-production.up.railway.app/
 
 ---
 
