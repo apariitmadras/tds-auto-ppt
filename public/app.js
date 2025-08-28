@@ -14,6 +14,18 @@ function alert(msg) {
   </div>`;
 }
 
+// Keep the key placeholder in sync with provider choice
+function updateKeyPlaceholder() {
+  const v = elProvider.value;
+  elApiKey.placeholder =
+    v === "openai"    ? "sk-..." :
+    v === "anthropic" ? "anthropic-api-key" :
+    v === "gemini"    ? "AIza..." :
+                        "your API key";
+}
+updateKeyPlaceholder();
+elProvider.addEventListener("change", updateKeyPlaceholder);
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   try {
