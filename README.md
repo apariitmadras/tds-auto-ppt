@@ -13,7 +13,30 @@ Turn long text/markdown into a downloadable **`.pptx`** that adopts the **style 
 - Works with or without an API key (heuristic fallback)
 - Minimal UI; clear inline error messages
 
+## Usage
+- Open the app.
+- Paste your text (markdown or prose).
+- (Optional) Add a one-line guidance (e.g., “investor pitch; brief notes”).
+- Choose LLM Provider (OpenAI / Claude / Gemini).
+- Paste the matching API key (or leave blank for heuristic mode).
+- Upload a PPT template (.pptx/.potx).
+
+Click Generate PPTX → generated.pptx will download.
 ---
+
+## Security & Privacy
+- API keys are used in-memory only for that single request; no logging or persistence.
+- Uploaded files are processed in memory and not stored.
+- No external image generation; output images come only from the uploaded template.
+
+## Short Write-Up (How It Works)
+Parsing & mapping text to slides.
+The app converts the user’s long text into a slide outline via two paths. If the user provides a valid key and selects a provider (OpenAI, Claude, or Gemini), the server sends a compact system instruction and the user content to the model and requests strict JSON:
+{ "slides": [ { "title": string, "bullets": string[], "notes"?: string } ] }.
+The JSON is validated and sanitized (caps on title/bullet length) before composition. If no key is present or the model call fails, the app falls back to a heuristic: it segments by markdown headings/blank lines, treats concise first lines as titles, and trims bullets. Slide count scales with input size and structure rather than being fixed.
+
+Applying the template’s style & assets.
+The uploaded .pptx/.potx is treated as a ZIP. The server extracts theme hints (colors/fonts) from /ppt/theme/theme*.xml and collects images from /ppt/media/*. Using pptxgenjs, the generator defines a simple master slide with the template’s background/accent color, applies major/minor fonts to titles and body, and composes a new deck from the outline. To meet constraints, no AI images are created; instead, images found in the template are reused (e.g., subtle cover background or small content inserts). This best-effort approach mirrors the template’s look while keeping assets consistent across generated slides.
 
 ## Quick Start
 
@@ -29,17 +52,3 @@ cp .env.example .env   # optional; keep keys blank to test heuristic mode
 npm run start
 # open http://localhost:8080
 
-
-## Security & Privacy
-- API keys are used in-memory only for that single request; no logging or persistence.
-- Uploaded files are processed in memory and not stored.
-- No external image generation; output images come only from the uploaded template.
-
-## Short Write-Up (How It Works)
-Parsing & mapping text to slides.
-The app converts the user’s long text into a slide outline via two paths. If the user provides a valid key and selects a provider (OpenAI, Claude, or Gemini), the server sends a compact system instruction and the user content to the model and requests strict JSON:
-{ "slides": [ { "title": string, "bullets": string[], "notes"?: string } ] }.
-The JSON is validated and sanitized (caps on title/bullet length) before composition. If no key is present or the model call fails, the app falls back to a heuristic: it segments by markdown headings/blank lines, treats concise first lines as titles, and trims bullets. Slide count scales with input size and structure rather than being fixed.
-
-Applying the template’s style & assets.
-The uploaded .pptx/.potx is treated as a ZIP. The server extracts theme hints (colors/fonts) from /ppt/theme/theme*.xml and collects images from /ppt/media/*. Using pptxgenjs, the generator defines a simple master slide with the template’s background/accent color, applies major/minor fonts to titles and body, and composes a new deck from the outline. To meet constraints, no AI images are created; instead, images found in the template are reused (e.g., subtle cover background or small content inserts). This best-effort approach mirrors the template’s look while keeping assets consistent across generated slides.
