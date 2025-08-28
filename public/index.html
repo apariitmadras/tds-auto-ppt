@@ -32,11 +32,16 @@
         <label class="form-label">LLM Provider</label>
         <select id="provider" class="form-select">
           <option value="openai">OpenAI</option>
+          <option value="anthropic">Claude (Anthropic)</option>
+          <option value="gemini">Gemini (Google)</option>
         </select>
       </div>
       <div class="col-sm-6">
         <label class="form-label">Your LLM API Key (never stored)</label>
-        <input id="apiKey" class="form-control" placeholder="sk-... (kept only in-memory for this request)">
+        <input id="apiKey" class="form-control" placeholder="sk-...">
+        <div class="form-text">
+          Key is used in-memory for this request only. Leave blank to use heuristic mode.
+        </div>
       </div>
     </div>
 
