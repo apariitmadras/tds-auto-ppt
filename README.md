@@ -36,7 +36,6 @@ npm run start
 - No external image generation; output images come only from the uploaded template.
 
 ## Short Write-Up (How It Works)
-
 Parsing & mapping text to slides.
 The app converts the user’s long text into a slide outline via two paths. If the user provides a valid key and selects a provider (OpenAI, Claude, or Gemini), the server sends a compact system instruction and the user content to the model and requests strict JSON:
 { "slides": [ { "title": string, "bullets": string[], "notes"?: string } ] }.
